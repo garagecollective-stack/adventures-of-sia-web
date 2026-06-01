@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://adventuresofsiaofficial.com/</loc><priority>1.0</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://adventuresofsiaofficial.com/games</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://adventuresofsiaofficial.com/games/memory</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://adventuresofsiaofficial.com/games/colouring</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://adventuresofsiaofficial.com/games/spot</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://adventuresofsiaofficial.com/games/puzzle</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://adventuresofsiaofficial.com/characters/sia</loc><priority>0.9</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://adventuresofsiaofficial.com/characters/milo</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://adventuresofsiaofficial.com/characters/arlo</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://adventuresofsiaofficial.com/parents</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+</urlset>
