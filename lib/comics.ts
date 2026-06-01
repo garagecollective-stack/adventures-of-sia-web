@@ -31,6 +31,9 @@ export const COMICS: Comic[] = [
     pdf: '/comics/issue-6.pdf', pages: 5, ratio: 1.414, accent: '#6C4FB0', isNew: false,
     emoji: '👹', blurb: 'Something is hiding under the bed… is it a scary monster, or a brand new friend?' },
   { id: 'issue-7', title: "Sia's Super Silly Science Day!", issue: 'Issue #7',
-    pdf: '/comics/issue-7.pdf', pages: 5, ratio: 1.414, accent: '#1FA98C', isNew: true,
+    pdf: '/comics/issue-7.pdf', pages: 5, ratio: 1.414, accent: '#1FA98C', isNew: false,
     emoji: '🔬', blurb: 'Bubbles, fizzes and a giant whoosh! Sia turns her day into one super-silly science experiment.' },
+  { id: 'issue-8', title: 'I Wish I Was Big!', issue: 'Issue #8',
+    pdf: '/comics/issue-8.pdf', pages: 5, ratio: 1.414, accent: '#E08A2E', isNew: true,
+    emoji: '🌻', blurb: 'Sia wishes and wishes she was all grown up — until she discovers the best things about being little!' },
 ];

@@ -4,9 +4,10 @@ import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import Cursor from '@/components/ui/Cursor';
 import ScrollProgress from '@/components/ui/ScrollProgress';
+import { COMICS } from '@/lib/comics';
 
 const VALUES = [
-  { e: '💜', title: 'Emotional Intelligence',  desc: 'Each episode helps children understand and name their feelings — curiosity, fear, joy, and kindness.' },
+  { e: '💜', title: 'Emotional Intelligence',  desc: 'Each story helps children understand and name their feelings — curiosity, fear, joy, and kindness.' },
   { e: '🌿', title: 'Love of Nature',          desc: "Sia's meadow world encourages children to look for beauty in the natural world around them." },
   { e: '🏠', title: 'Family Bonds',             desc: 'Milo and Arlo model warm, patient parenting — showing that home is always a safe place to return to.' },
   { e: '🔍', title: 'Curiosity & Learning',    desc: "Sia's 'why?' questions model a growth mindset and celebrate not knowing as the start of discovery." },
@@ -14,12 +15,17 @@ const VALUES = [
   { e: '🤝', title: 'Kindness to Others',      desc: 'Sia always considers how her actions affect others — a core thread woven through every story.' },
 ];
 
-const EPISODES = [
-  { ep: 'S1 E1', title: 'The Big Rainbow',     age: '2–6', themes: ['Wonder', 'Patience'], desc: "Sia chases a rainbow and learns that some things are worth waiting for." },
-  { ep: 'S1 E2', title: "Milo's Lost Recipe",  age: '3–6', themes: ['Helping', 'Memory'],  desc: "Helping Mum find her recipe teaches Sia about teamwork and attention to detail." },
-  { ep: 'S1 E3', title: 'The Shy Butterfly',   age: '2–5', themes: ['Empathy', 'Patience'],desc: "Sia learns that kindness and patience are the best ways to make a new friend." },
-  { ep: 'S1 E4', title: 'Stargazing with Arlo',age: '3–6', themes: ['Wonder', 'Family'],   desc: "A bedtime stargazing session with Dad turns into a lesson about the vastness of the universe." },
-];
+// parent discussion notes keyed by comic id
+const COMIC_GUIDE: Record<string, { themes: string[]; note: string }> = {
+  'issue-1': { themes: ['Patience', 'Perseverance'], note: 'Chat about how it feels when something doesn’t work the first time — and why trying again matters.' },
+  'issue-2': { themes: ['Responsibility', 'Problem-Solving'], note: 'Talk about owning up to little accidents and working together to put things right.' },
+  'issue-3': { themes: ['Curiosity', 'Nature'], note: 'Explore where rain really comes from, then spot the weather together on your next walk.' },
+  'issue-4': { themes: ['Facing Fears', 'Wonder'], note: 'A gentle way to talk about the dark — and the magic hiding in the night sky.' },
+  'issue-5': { themes: ['Humour', 'Staying Calm'], note: 'Giggle along, then chat about the silly ways our bodies sometimes surprise us.' },
+  'issue-6': { themes: ['Bravery', 'Empathy'], note: 'Reassure little ones about bedtime worries — and meeting the unknown with kindness.' },
+  'issue-7': { themes: ['Curiosity', 'Experimenting'], note: 'Try a safe, silly kitchen experiment together after reading!' },
+  'issue-8': { themes: ['Self-Acceptance', 'Growing Up'], note: 'Talk about how everyone grows at their own pace — and the special things about being little.' },
+};
 
 const ACTIVITIES_GUIDE = [
   { e: '🎨', a: 'Colouring',   desc: 'Fine motor skills, colour recognition, creative expression' },
@@ -68,7 +74,7 @@ export default function ParentsPage() {
             </h2>
             <div className="grid sm:grid-cols-3 gap-6 mb-12">
               {[
-                { e: '👶', title: 'Ages 2–6',    desc: 'All content is carefully created for pre-school and early primary children.', color: '#A8D8C4', bg: '#F0FBF4' },
+                { e: '👶', title: 'Ages 2–8',    desc: 'All content is carefully created for pre-school and early primary children.', color: '#A8D8C4', bg: '#F0FBF4' },
                 { e: '🚫', title: 'Ad Free',     desc: 'No advertisements, no in-app purchases, no tracking. Just stories and activities.', color: '#C8A8D8', bg: '#F8F0FC' },
                 { e: '🛡️', title: 'Child Safe',  desc: 'Reviewed by early childhood educators. No violence, no scary content, no bad role models.', color: '#AABFE0', bg: '#EEF6FF' },
               ].map((c, i) => (
@@ -90,7 +96,7 @@ export default function ParentsPage() {
               What your child will learn
             </h2>
             <p className="text-center text-text-mid text-[1rem] mb-10 max-w-[500px] mx-auto">
-              Every episode gently weaves in values that support healthy development.
+              Every story gently weaves in values that support healthy development.
             </p>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {VALUES.map((v, i) => (
@@ -104,37 +110,65 @@ export default function ParentsPage() {
           </div>
         </section>
 
-        {/* Episode guide */}
+        {/* Comic reading guide */}
         <section className="py-20 px-6" style={{ background: '#FFFBF4' }}>
           <div className="max-w-5xl mx-auto">
             <h2 className="font-display text-[clamp(1.8rem,3.5vw,2.5rem)] text-text-deep text-center mb-3">
-              Episode Guide
+              Comic Reading Guide
             </h2>
             <p className="text-center text-text-mid mb-10 max-w-[480px] mx-auto">
-              Use these notes to watch together and talk about the themes afterwards.
+              Read each comic together, then use these notes to talk about the themes afterwards.
             </p>
             <div className="grid sm:grid-cols-2 gap-5">
-              {EPISODES.map((ep, i) => (
-                <div key={i} className="p-6 rounded-[24px] bg-white shadow-[0_4px_20px_rgba(0,0,0,0.06)]">
-                  <div className="flex items-center gap-3 mb-3">
-                    <span className="font-display text-[.78rem] px-3 py-1.5 rounded-full bg-brand-violet/10 text-brand-violet">
-                      {ep.ep}
-                    </span>
-                    <span className="text-[.78rem] font-bold text-text-mid">Ages {ep.age}</span>
-                  </div>
-                  <h3 className="font-display text-[1.15rem] text-text-deep mb-2">{ep.title}</h3>
-                  <p className="text-[.85rem] text-text-mid leading-[1.7] mb-3">{ep.desc}</p>
-                  <div className="flex gap-2 flex-wrap">
-                    {ep.themes.map(t => (
-                      <span key={t} className="text-[.72rem] font-bold px-3 py-1.5 rounded-full"
-                        style={{ background: '#F0EAFC', color: '#7A5CAA' }}>
-                        {t}
+              {COMICS.map((c) => {
+                const g = COMIC_GUIDE[c.id];
+                return (
+                  <Link key={c.id} href="/comics"
+                    className="block p-6 rounded-[24px] bg-white shadow-[0_4px_20px_rgba(0,0,0,0.06)]
+                               hover:shadow-[0_8px_28px_rgba(122,92,170,0.16)] transition-shadow">
+                    <div className="flex items-center gap-3 mb-3">
+                      <span className="text-[1.5rem]">{c.emoji}</span>
+                      <span className="font-display text-[.78rem] px-3 py-1.5 rounded-full bg-brand-violet/10 text-brand-violet">
+                        {c.issue}
                       </span>
-                    ))}
-                  </div>
-                </div>
-              ))}
+                      <span className="text-[.74rem] font-bold text-text-mid">{c.pages} pages</span>
+                    </div>
+                    <h3 className="font-display text-[1.15rem] text-text-deep mb-2">{c.title}</h3>
+                    <p className="text-[.85rem] text-text-mid leading-[1.7] mb-3">{c.blurb}</p>
+                    {g && (
+                      <p className="text-[.82rem] leading-[1.65] mb-3 px-3 py-2 rounded-xl"
+                        style={{ background: '#F6F2FC', color: '#6A5690' }}>
+                        💬 {g.note}
+                      </p>
+                    )}
+                    <div className="flex gap-2 flex-wrap">
+                      {g?.themes.map(t => (
+                        <span key={t} className="text-[.72rem] font-bold px-3 py-1.5 rounded-full"
+                          style={{ background: '#F0EAFC', color: '#7A5CAA' }}>
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
+          </div>
+        </section>
+
+        {/* Videos — coming soon */}
+        <section className="py-16 px-6 text-center" style={{ background: '#EEF6FF' }}>
+          <div className="max-w-xl mx-auto">
+            <span className="text-4xl block mb-3">📺</span>
+            <h2 className="font-display text-[clamp(1.6rem,3vw,2.2rem)] text-text-deep mb-3">Animated Videos</h2>
+            <span className="inline-flex items-center gap-2 font-display text-[.95rem] text-white px-6 py-2.5 rounded-full mb-4"
+              style={{ fontWeight: 700, background: 'linear-gradient(135deg,#7A5CAA,#AABFE0)', boxShadow: '0 10px 26px rgba(122,92,170,0.3)' }}>
+              ✨ Coming Soon ✨
+            </span>
+            <p className="text-text-mid text-[.95rem] leading-[1.8] max-w-[460px] mx-auto">
+              Animated episodes of Sia&rsquo;s adventures are hopping their way to your screen.
+              For now, enjoy reading the comics together! 🐰
+            </p>
           </div>
         </section>
 
@@ -168,7 +202,7 @@ export default function ParentsPage() {
             <span className="text-4xl block mb-4">💌</span>
             <h2 className="font-display text-[2rem] text-text-deep mb-3">Stay in the loop</h2>
             <p className="text-text-mid mb-6">
-              Get new episodes, printable activity packs, and seasonal content delivered straight to your inbox.
+              Get new comics, printable activity packs, and seasonal content delivered straight to your inbox.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
               <input type="email" placeholder="your@email.com"
