@@ -98,14 +98,16 @@ export default function Footer() {
         </svg>
       </div>
 
-      {/* ── Floating star decorations ── */}
+      {/* ── Floating star decorations — CSS diamonds ── */}
       {STARS.map((s,i) => (
-        <div key={i} className="absolute pointer-events-none select-none"
-          style={{ top:s.top, left:s.left, fontSize:s.s, opacity:0.6,
+        <div key={i} className="absolute pointer-events-none select-none rounded-[2px]"
+          style={{ top:s.top, left:s.left,
+            width: parseFloat(s.s) * 14, height: parseFloat(s.s) * 14,
+            background:'rgba(255,255,255,0.85)',
+            transform:'rotate(45deg)',
+            opacity:0.55,
             animation:`twinkle ${s.dur} ease-in-out infinite`, animationDelay:s.delay,
-            color:'rgba(255,255,255,0.9)' }}>
-          ✦
-        </div>
+          }} />
       ))}
 
       {/* ── Soft moon glow ── */}
@@ -114,14 +116,14 @@ export default function Footer() {
           background:'radial-gradient(circle,rgba(255,230,180,0.22) 0%,transparent 70%)',
           filter:'blur(30px)' }} />
 
-      {/* ── Sleeping Sia — bottom-right corner ── */}
+      {/* ── Sleeping Sia bottom-right corner ── */}
       <div className="absolute bottom-0 right-0 pointer-events-none select-none hidden md:block z-0"
         style={{ width:'clamp(240px,26vw,380px)', aspectRatio:'896 / 1152',
           WebkitMaskImage:'linear-gradient(to bottom, transparent 0%, #000 38%), linear-gradient(to right, transparent 0%, #000 38%)',
           WebkitMaskComposite:'source-in',
           maskImage:'linear-gradient(to bottom, transparent 0%, #000 38%), linear-gradient(to right, transparent 0%, #000 38%)',
           maskComposite:'intersect' }}>
-        <Image src="/images/footer-corner.png" alt="Goodnight from Sia" fill sizes="380px"
+        <Image src="/images/footer-corner.webp" alt="Goodnight from Sia" fill sizes="380px"
           className="object-cover" style={{ objectPosition:'center center' }} />
       </div>
 
@@ -135,14 +137,14 @@ export default function Footer() {
           {/* Brand */}
           <div className="col-span-2 sm:col-span-3 lg:col-span-1">
             <div className="mb-5">
-              <Link href="/" aria-label="Adventures of Sia — home"
+              <Link href="/" aria-label="Adventures of Sia home"
                 className="inline-block hover:scale-105 transition-transform duration-300">
-                <Image src="/images/logo-new.png" alt="Adventures of Sia"
+                <Image src="/images/logo-new.webp" alt="Adventures of Sia"
                   width={260} height={195} className="object-contain h-[74px] sm:h-[116px] w-auto"/>
               </Link>
             </div>
             <p className="font-body text-[0.88rem] leading-[1.75] text-white/75 max-w-[220px] mb-5">
-              A magical world of wonder and discovery for curious little explorers. 💜
+              A magical world of wonder and discovery for curious little explorers.
             </p>
             <div className="flex gap-2 flex-wrap mb-6">
               {['Ages 2–8','Child Safe','Ad Free'].map(b => (
@@ -196,9 +198,11 @@ export default function Footer() {
         {/* ── Bottom bar ── */}
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pb-8">
           <p className="font-body text-[0.78rem] text-white/60 flex items-center gap-2">
-            <span>🌙</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="rgba(255,255,255,0.6)" stroke="none">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
             <span>
-              © 2026 Adventures of Sia. All rights reserved. Made with 💜 by{' '}
+              © 2026 Adventures of Sia. All rights reserved. Made with care by{' '}
               <a href="https://garagecollective.agency" target="_blank" rel="noopener noreferrer"
                 className="font-semibold text-white/80 underline decoration-white/40 underline-offset-2
                            hover:text-white hover:decoration-white transition-colors">

@@ -11,7 +11,7 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
       <div className="text-[5rem] mb-4 anim-float">😟</div>
       <h1 className="font-display text-[2.2rem] text-text-deep mb-3">Something went wobbly!</h1>
       <p className="text-text-mid text-[1rem] leading-[1.8] mb-8 max-w-md">
-        Even Sia has wobbly days. Don&apos;t worry — we can fix this!
+        Even Sia has wobbly days. Don&apos;t worry we can fix this!
       </p>
       <div className="flex gap-3 flex-wrap justify-center">
         <button onClick={reset}

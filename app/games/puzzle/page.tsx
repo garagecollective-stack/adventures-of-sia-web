@@ -3,6 +3,8 @@ import { useState, useCallback, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import Cursor from '@/components/ui/Cursor';
+import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
 import { useSound } from '@/hooks/useSound';
 import { useBadges } from '@/hooks/useBadges';
 import { BadgeToast } from '@/components/Toast';
@@ -73,9 +75,10 @@ export default function JigsawPuzzle() {
   // SVG meadow split into pieces via clip-path
   return (
     <>
+      <Navigation />
       <Cursor />
       <BadgeToast badge={newBadge} onClose={clearNew} />
-      <div className="min-h-screen px-4 py-8" style={{ background: '#F0FBF4' }}>
+      <div className="min-h-screen px-4 pt-28 pb-8" style={{ background: '#F0FBF4' }}>
 
         <div className="max-w-3xl mx-auto mb-6">
           <div className="flex items-center justify-between mb-4">
@@ -101,7 +104,7 @@ export default function JigsawPuzzle() {
                   color: diff === d ? 'white' : '#7A6890',
                   border: `2px solid ${diff === d ? '#3A7850' : 'rgba(0,0,0,0.1)'}`,
                 }}>
-                {d} — {DIFFS[d].label}
+                {d} {DIFFS[d].label}
               </button>
             ))}
           </div>
@@ -206,6 +209,7 @@ export default function JigsawPuzzle() {
           )}
         </AnimatePresence>
       </div>
+      <Footer />
     </>
   );
 }

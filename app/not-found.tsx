@@ -38,12 +38,12 @@ export default function NotFound() {
               <ellipse cx="112" cy="44" rx="14" ry="34" fill="#F5F0F0"/>
               <ellipse cx="68" cy="44" rx="8" ry="25" fill="#FFB8C4"/>
               <ellipse cx="112" cy="44" rx="8" ry="25" fill="#FFB8C4"/>
-              {/* Eyes — confused squiggle */}
+              {/* Eyes confused squiggle */}
               <path d="M74 88 Q77 84 80 88" stroke="#7A5CAA" strokeWidth="3" strokeLinecap="round" fill="none"/>
               <path d="M100 88 Q103 84 106 88" stroke="#7A5CAA" strokeWidth="3" strokeLinecap="round" fill="none"/>
               {/* Nose */}
               <ellipse cx="90" cy="99" rx="5" ry="4" fill="#FFB8C4"/>
-              {/* Mouth — sad curve */}
+              {/* Mouth sad curve */}
               <path d="M81 110 Q90 106 99 110" stroke="#9A8AB0" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
               {/* Dress */}
               <path d="M58 148 Q90 133 122 148 L130 200 Q90 212 50 200 Z" fill="#C8A8D8"/>

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Games — Adventures of Sia',
+  title: 'Games Adventures of Sia',
   description: 'Play fun games with Sia the bunny!',
 };
 

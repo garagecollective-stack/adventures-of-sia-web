@@ -128,7 +128,7 @@ export default function WatchCTA() {
           transition={{ duration: 0.8, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
           className="text-[1.1rem] text-white/80 mb-10 leading-[1.75] max-w-[520px] mx-auto"
         >
-          Join Sia, Milo and Arlo in their cosy meadow adventures —
+          Join Sia, Milo and Arlo in their cosy meadow adventures
           full of laughter, learning and lots and lots of love! 🌸
         </motion.p>
 

@@ -282,7 +282,7 @@ function LatestStoryScene() {
       {/* Bunny */}
       <div style={{ position:'absolute', bottom:0, left:'50%', transform:'translateX(-48%)',
         width:168, height:196 }}>
-        <Image src="/images/sia-character.png" alt="Sia on the rainbow bridge"
+        <Image src="/images/sia-character.webp" alt="Sia on the rainbow bridge"
           width={220} height={250} className="w-full h-full object-contain"
           style={{ filter:'drop-shadow(0 10px 22px rgba(147,117,242,0.28))' }} />
       </div>
@@ -343,7 +343,7 @@ export default function AdventureWorlds() {
               </Link>
             </motion.div>
 
-            {/* World cards — 5-up grid */}
+            {/* World cards 5-up grid */}
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 flex-1">
               {WORLDS.map((w, i) => (
                 <motion.div key={w.id}

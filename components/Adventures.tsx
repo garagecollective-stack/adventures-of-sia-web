@@ -19,7 +19,7 @@ const EPISODES = [
   {
     num: 'Episode 2',
     title: "Milo's Baking Day",
-    desc: "Mum is making carrot biscuits and Sia desperately wants to help — but baking is trickier than it looks!",
+    desc: "Mum is making carrot biscuits and Sia desperately wants to help but baking is trickier than it looks!",
     emoji: '🍪',
     gradient: 'linear-gradient(135deg, #F5ECD8 0%, #E0C490 100%)',
     accent: '#C8A050',
@@ -35,7 +35,7 @@ const EPISODES = [
   {
     num: 'Episode 4',
     title: "Arlo's Garden Secret",
-    desc: "Dad has a hidden corner in the garden — and today he's finally going to show Sia his greatest surprise!",
+    desc: "Dad has a hidden corner in the garden and today he's finally going to show Sia his greatest surprise!",
     emoji: '🌱',
     gradient: 'linear-gradient(135deg, #B8DEC8 0%, #7AAB88 100%)',
     accent: '#508870',
@@ -59,7 +59,7 @@ const EPISODES = [
   {
     num: 'Episode 7',
     title: 'Puddle Day',
-    desc: "It rained all night and now Sia's meadow has the best puddles in the whole world — perfect for jumping!",
+    desc: "It rained all night and now Sia's meadow has the best puddles in the whole world perfect for jumping!",
     emoji: '💧',
     gradient: 'linear-gradient(135deg, #C8EAF8 0%, #88C8E8 100%)',
     accent: '#4890C0',
@@ -166,7 +166,7 @@ export default function Adventures() {
               {watched.size}/{EPISODES.length} watched
             </span>
           </div>
-          {/* Scroll hint — visible before scrolling */}
+          {/* Scroll hint visible before scrolling */}
           <motion.div className="flex items-center justify-center gap-2 mt-4 text-text-mid"
             animate={{ opacity: [.5, 1, .5] }} transition={{ duration: 2, repeat: Infinity }}>
             <span className="text-[.8rem] font-semibold">Scroll to see all episodes</span>
@@ -175,7 +175,7 @@ export default function Adventures() {
         </motion.div>
       </div>
 
-      {/* Horizontal scroll track — mobile: vertical wrap; desktop: GSAP horizontal */}
+      {/* Horizontal scroll track mobile: vertical wrap; desktop: GSAP horizontal */}
       <div
         ref={trackRef}
         className="flex flex-wrap lg:flex-nowrap gap-4 lg:gap-6 px-4 sm:px-6 lg:px-10 pb-8 lg:pb-16 w-full lg:w-max"
@@ -270,7 +270,7 @@ export default function Adventures() {
           </div>
           <h3 className="font-display text-[1.2rem] text-text-deep">More adventures coming soon!</h3>
           <p className="text-[0.85rem] text-text-mid leading-[1.6]">
-            Sia is busy exploring — new episodes drop every week!
+            Sia is busy exploring new episodes drop every week!
           </p>
         </motion.div>
       </div>

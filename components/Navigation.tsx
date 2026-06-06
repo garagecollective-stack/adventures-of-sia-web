@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { usePathname, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const NAV_LINKS = [
@@ -18,6 +19,9 @@ export default function Navigation() {
   const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState('');
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
+  const isHome = pathname === '/';
 
   useEffect(() => {
     const onScroll = () => {
@@ -32,8 +36,12 @@ export default function Navigation() {
   }, []);
 
   const scrollTo = (href: string) => {
-    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     setOpen(false);
+    if (!isHome) {
+      router.push('/' + href);
+      return;
+    }
+    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   return (
@@ -45,9 +53,9 @@ export default function Navigation() {
         className="max-w-7xl mx-auto flex items-center justify-between h-[68px] sm:h-[78px] px-4 sm:px-6 rounded-[28px] nav-floating"
       >
         {/* Logo → home */}
-        <Link href="/" aria-label="Adventures of Sia — home"
+        <Link href="/" aria-label="Adventures of Sia home"
           className="shrink-0 hover:scale-105 transition-transform duration-300 relative z-10">
-          <Image src="/images/logo-new.png" alt="Adventures of Sia"
+          <Image src="/images/logo-new.webp" alt="Adventures of Sia"
             width={280} height={210} className="object-contain w-auto h-[76px] sm:h-[112px]" />
         </Link>
 
@@ -79,15 +87,6 @@ export default function Navigation() {
 
         {/* Right side */}
         <div className="hidden lg:flex items-center gap-2.5 shrink-0">
-          {/* Search */}
-          <button aria-label="Search"
-            className="w-10 h-10 rounded-2xl bg-white flex items-center justify-center text-[#8B86A0]
-                       hover:text-[#A88CFF] shadow-[0_2px_10px_rgba(168,140,255,0.15)] transition-colors">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-              strokeWidth="2.5" strokeLinecap="round">
-              <circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
-            </svg>
-          </button>
           {/* Parents */}
           <motion.div whileHover={{ scale: 1.04, y: -2 }} whileTap={{ scale: 0.96 }}>
             <Link href="/parents"

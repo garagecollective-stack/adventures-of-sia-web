@@ -4,6 +4,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import Cursor from '@/components/ui/Cursor';
+import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
 import { useSound } from '@/hooks/useSound';
 import { useBadges } from '@/hooks/useBadges';
 import { BadgeToast } from '@/components/Toast';
@@ -11,7 +13,7 @@ import Confetti from '@/components/Confetti';
 
 /*
   Both panels show the same real Sia photo (sia-outdoor.jpeg).
-  The RIGHT panel has 5 overlay elements added on top — those are the differences.
+  The RIGHT panel has 5 overlay elements added on top those are the differences.
   Clicking a hotspot on the right marks it found; a green ring appears on BOTH panels.
 */
 
@@ -121,7 +123,7 @@ function ScenePanel({
         <div className="relative w-full" style={{ aspectRatio: '16/9' }}>
           <Image
             src="/images/sia-outdoor.jpeg"
-            alt={`Sia's meadow — picture ${isRight ? '2' : '1'}`}
+            alt={`Sia's meadow picture ${isRight ? '2' : '1'}`}
             fill
             className="object-cover"
             sizes="(max-width:640px) 100vw, 50vw"
@@ -222,11 +224,12 @@ export default function SpotDifference() {
 
   return (
     <>
+      <Navigation />
       <Cursor />
       <BadgeToast badge={newBadge} onClose={clearNew} />
       <Confetti trigger={confetti} onDone={() => setConfetti(false)} />
 
-      <div className="min-h-screen px-4 py-8" style={{ background: '#FFF0E8' }}>
+      <div className="min-h-screen px-4 pt-28 pb-8" style={{ background: '#FFF0E8' }}>
 
         {/* Header */}
         <div className="max-w-5xl mx-auto mb-6">
@@ -332,6 +335,7 @@ export default function SpotDifference() {
         </AnimatePresence>
 
       </div>
+      <Footer />
     </>
   );
 }

@@ -7,7 +7,7 @@ import BackToTop from '@/components/BackToTop';
 import ComicsLibrary from '@/components/ComicsLibrary';
 
 export const metadata: Metadata = {
-  title: "Sia's Comic Adventures — Read All Comics",
+  title: "Sia's Comic Adventures Read All Comics",
   description: 'Flip through every Adventures of Sia comic book in order, right in your browser.',
 };
 

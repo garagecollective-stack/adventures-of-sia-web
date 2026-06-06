@@ -26,7 +26,9 @@ export default function BackToTop() {
                      justify-center text-white shadow-[0_8px_24px_rgba(122,92,170,0.4)]"
           style={{ background: 'linear-gradient(135deg,#7A5CAA,#AABFE0)' }}
           aria-label="Back to top">
-          ↑
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="18 15 12 9 6 15" />
+          </svg>
         </motion.button>
       )}
     </AnimatePresence>

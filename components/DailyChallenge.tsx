@@ -9,7 +9,7 @@ const CHALLENGES = [
   { emoji: '🌸', title: 'Make Pom Flowers!', desc: 'Ask a grown-up to help you make real pom-pom flowers just like the ones in Sia\'s garden!',  color: '#F8F0FC', accent: '#C8A8D8', action: 'See Instructions',   href: '#activities'     },
   { emoji: '🍪', title: 'Bake with Mum!',    desc: 'Make Milo\'s famous carrot biscuits today. They\'re delicious and easy to make!',            color: '#FFF8E8', accent: '#E2C040', action: 'Get the Recipe',     href: '#activities'     },
   { emoji: '🔍', title: 'Spot 5 Things!',    desc: 'Go outside and find 5 things that are in Sia\'s meadow: a flower, a bug, a leaf, a stone and a cloud!', color: '#F0FBF4', accent: '#8AB890', action: 'Spot the Difference', href: '/games/spot' },
-  { emoji: '✏️', title: 'Draw Sia!',          desc: 'Follow the steps to draw your own picture of Sia. Remember — the floppy ears are her favourite part!', color: '#FFFBF4', accent: '#7A5CAA', action: 'Start Drawing',      href: '#activities'     },
+  { emoji: '✏️', title: 'Draw Sia!',          desc: 'Follow the steps to draw your own picture of Sia. Remember the floppy ears are her favourite part!', color: '#FFFBF4', accent: '#7A5CAA', action: 'Start Drawing',      href: '#activities'     },
   { emoji: '🌈', title: 'Rainbow Hunt!',     desc: 'Can you spot a rainbow today? If not, draw the most colourful rainbow you can imagine!',      color: '#F0EAFC', accent: '#9478C8', action: 'Colour a Rainbow',  href: '/games/colouring'},
 ];
 

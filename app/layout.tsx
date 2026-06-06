@@ -28,10 +28,10 @@ const BASE_URL = 'https://adventuresofsiaofficial.com';
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: 'Adventures of Sia — Official Website',
-    template: '%s — Adventures of Sia',
+    default: 'Adventures of Sia Official Website',
+    template: '%s Adventures of Sia',
   },
-  description: 'A little bunny with a big, curious heart. Join Sia, Milo and Arlo on magical meadow adventures! Free games, colouring books and activities for kids aged 2–8.',
+  description: 'A little bunny with a big, curious heart. Join Sia, Milo and Arlo on magical meadow adventures! Free games, colouring books and activities for kids aged 2–6.',
   keywords: ['Adventures of Sia', 'kids cartoon', 'bunny', 'children animation', 'kids games', 'colouring pages', 'toddler show', 'preschool cartoon', 'free kids activities'],
   authors: [{ name: 'Garage Collective' }],
   creator: 'Garage Collective',
@@ -42,21 +42,21 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: BASE_URL,
     siteName: 'Adventures of Sia',
-    title: 'Adventures of Sia — Official Website',
-    description: 'A little bunny with a big, curious heart. Free games, colouring books and activities for kids aged 2–8.',
+    title: 'Adventures of Sia Official Website',
+    description: 'A little bunny with a big, curious heart. Free games, colouring books and activities for kids aged 2–6.',
     images: [
       {
         url: '/images/og-image.jpeg',
         width: 1200,
         height: 630,
-        alt: 'Adventures of Sia — Sia the bunny in her magical meadow',
+        alt: 'Adventures of Sia Sia the bunny in her magical meadow',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Adventures of Sia — Official Website',
-    description: 'A little bunny with a big, curious heart. Free games, colouring and activities for kids 2–8!',
+    title: 'Adventures of Sia Official Website',
+    description: 'A little bunny with a big, curious heart. Free games, colouring and activities for kids 2–6!',
     images: ['/images/og-image.jpeg'],
   },
   icons: {

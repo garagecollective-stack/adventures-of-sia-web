@@ -3,6 +3,8 @@ import { useRef, useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import Cursor from '@/components/ui/Cursor';
+import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
 import { useSound } from '@/hooks/useSound';
 import { useBadges } from '@/hooks/useBadges';
 import { BadgeToast } from '@/components/Toast';
@@ -152,9 +154,10 @@ export default function ColouringBook() {
 
   return (
     <>
+      <Navigation />
       <Cursor />
       <BadgeToast badge={newBadge} onClose={clearNew} />
-      <div className="min-h-screen px-4 py-8" style={{ background: '#F8F0FC' }}>
+      <div className="min-h-screen px-4 pt-28 pb-8" style={{ background: '#F8F0FC' }}>
 
         {/* Header */}
         <div className="max-w-4xl mx-auto mb-6">
@@ -166,19 +169,30 @@ export default function ColouringBook() {
             <div className="flex gap-3">
               <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: .96 }}
                 onClick={reset}
-                className="btn-sia font-display text-[.85rem] px-5 py-2.5 border-2 text-brand-violet"
+                className="btn-sia font-display text-[.85rem] px-5 py-2.5 border-2 text-brand-violet flex items-center gap-1.5"
                 style={{ background: 'white', borderColor: 'rgba(122,92,170,.25)' }}>
-                🗑 Clear
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                Clear
               </motion.button>
               <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: .96 }}
                 onClick={download}
-                className="btn-sia text-white font-display text-[.85rem] px-5 py-2.5"
+                className="btn-sia text-white font-display text-[.85rem] px-5 py-2.5 flex items-center gap-1.5"
                 style={{ background: 'linear-gradient(135deg,#7A5CAA,#AABFE0)' }}>
-                {saved ? '✓ Saved!' : '⬇ Save'}
+                {saved ? (
+                  <>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    Saved!
+                  </>
+                ) : (
+                  <>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Save
+                  </>
+                )}
               </motion.button>
             </div>
           </div>
-          <h1 className="font-display text-[2rem] text-text-deep text-center mb-2">🎨 Colouring Book</h1>
+          <h1 className="font-display text-[2rem] text-text-deep text-center mb-2">Colouring Book</h1>
           <p className="text-center text-text-mid text-[.9rem] mb-4">Click any area, then click a colour to fill it!</p>
 
           {/* Scene selector */}
@@ -207,7 +221,7 @@ export default function ColouringBook() {
               {/* Layer 1: filled colourable regions */}
               {SCENE_REGIONS[scene].map(r => renderRegion(r))}
 
-              {/* Layer 2: Bold outline pass on top — creates colouring-book look */}
+              {/* Layer 2: Bold outline pass on top creates colouring-book look */}
               {SCENE_REGIONS[scene].map(r => {
                 const outlineProps = { key:`ol-${r.id}`, fill:'none',
                   stroke:'rgba(58,40,80,0.55)', strokeWidth:'2',
@@ -227,7 +241,7 @@ export default function ColouringBook() {
           {/* Colour palette */}
           <div className="lg:w-48 rounded-[28px] p-5 shadow-[0_8px_32px_rgba(0,0,0,0.1)]"
             style={{ background: 'white' }}>
-            <p className="font-display text-[1rem] text-text-deep mb-4 text-center">🖌 Choose Colour</p>
+            <p className="font-display text-[1rem] text-text-deep mb-4 text-center">Choose Colour</p>
             <div className="grid grid-cols-5 lg:grid-cols-4 gap-2 mb-4">
               {PALETTE.map(c => (
                 <motion.button key={c}
@@ -273,6 +287,7 @@ export default function ColouringBook() {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 }

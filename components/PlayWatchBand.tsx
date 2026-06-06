@@ -133,7 +133,7 @@ export default function PlayWatchBand() {
 
             {/* Bunny with mailbox */}
             <div className="absolute bottom-0 right-2 w-[92px] h-[104px] pointer-events-none">
-              <Image src="/images/sia-character.png" alt="Sia with a mailbox"
+              <Image src="/images/sia-character.webp" alt="Sia with a mailbox"
                 width={120} height={140} className="w-full h-full object-contain object-bottom"
                 style={{ filter:'drop-shadow(0 8px 16px rgba(192,77,134,0.25))' }} />
             </div>

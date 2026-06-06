@@ -3,6 +3,8 @@ import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import Cursor from '@/components/ui/Cursor';
+import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
 import { useSound } from '@/hooks/useSound';
 import { useBadges } from '@/hooks/useBadges';
 import { BadgeToast } from '@/components/Toast';
@@ -126,10 +128,11 @@ export default function MemoryGame() {
 
   return (
     <>
+      <Navigation />
       <Cursor />
       <BadgeToast badge={newBadge} onClose={clearNew} />
       <Confetti trigger={confetti} onDone={() => setConfetti(false)} />
-      <div className="min-h-screen px-4 py-8" style={{ background: '#EEF6FF' }}>
+      <div className="min-h-screen px-4 pt-28 pb-8" style={{ background: '#EEF6FF' }}>
 
         {/* Header */}
         <div className="max-w-2xl mx-auto mb-6">
@@ -139,13 +142,13 @@ export default function MemoryGame() {
               ← Games
             </Link>
             <div className="flex items-center gap-4 text-[.85rem] font-bold text-text-mid">
-              <span>⏱ {Math.floor(seconds / 60).toString().padStart(2,'0')}:{(seconds % 60).toString().padStart(2,'0')}</span>
-              <span>🃏 {moves} moves</span>
-              <span>✓ {matched}/{DIFF_CONFIG[diff].pairs}</span>
+              <span>{Math.floor(seconds / 60).toString().padStart(2,'0')}:{(seconds % 60).toString().padStart(2,'0')}</span>
+              <span>{moves} moves</span>
+              <span>{matched}/{DIFF_CONFIG[diff].pairs} matched</span>
             </div>
           </div>
           <div className="text-center mb-4">
-            <h1 className="font-display text-[2rem] text-text-deep mb-2">🧠 Memory Match</h1>
+            <h1 className="font-display text-[2rem] text-text-deep mb-2">Memory Match</h1>
             <p className="text-text-mid text-[.9rem]">Find all the matching pairs!</p>
           </div>
           {/* Difficulty */}
@@ -159,7 +162,7 @@ export default function MemoryGame() {
                   boxShadow: diff === d ? '0 4px 14px rgba(0,0,0,0.1)' : 'none',
                   border: `2px solid ${diff === d ? DIFF_CONFIG[d].color : 'rgba(0,0,0,0.08)'}`,
                 }}>
-                {d.charAt(0).toUpperCase() + d.slice(1)} — {DIFF_CONFIG[d].label}
+                {d.charAt(0).toUpperCase() + d.slice(1)} {DIFF_CONFIG[d].label}
               </button>
             ))}
           </div>
@@ -219,7 +222,7 @@ export default function MemoryGame() {
             onClick={() => reset()}
             className="btn-sia text-white font-display text-[.95rem] px-7 py-3"
             style={{ background: 'linear-gradient(135deg,#7A5CAA,#AABFE0)' }}>
-            🔄 Shuffle & Restart
+            Shuffle &amp; Restart
           </motion.button>
         </div>
 
@@ -264,6 +267,7 @@ export default function MemoryGame() {
           )}
         </AnimatePresence>
       </div>
+      <Footer />
     </>
   );
 }
