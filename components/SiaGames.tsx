@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { useRef, useState, useEffect } from 'react';
 
@@ -16,7 +17,7 @@ type GameDef = {
 
 const LEVELS_PER_GAME = 5;
 const STORE_KEY = 'sia-games-progress-v1';
-type Progress = Record<string, Record<number, number>>; // gameId -> level -> stars
+type Progress = Record<string, Record<number, number>>;
 
 function useProgress() {
   const [prog, setProg] = useState<Progress>({});
@@ -39,7 +40,7 @@ const isUnlocked = (prog: Progress, id: string, level: number) =>
   level === 1 || (prog[id]?.[level - 1] ?? 0) >= 1;
 
 /* ════════════════════════════════════════════════════════════════
-   tiny helpers
+   Helpers
    ════════════════════════════════════════════════════════════════ */
 function shuffle<T>(arr: T[]): T[] {
   const r = [...arr];
@@ -50,138 +51,116 @@ const starsBy = (score: number, target: number) =>
   score >= target ? 3 : score >= Math.ceil(target * 0.6) ? 2 : 1;
 
 /* ════════════════════════════════════════════════════════════════
-   SVG building blocks (for thumbnails)
+   Icon components (replacing all emoji)
    ════════════════════════════════════════════════════════════════ */
-function SvgBunny({ x, y, s = 1 }: { x: number; y: number; s?: number }) {
+function LockIcon({ size = 22 }: { size?: number }) {
   return (
-    <g transform={`translate(${x} ${y}) scale(${s})`}>
-      <ellipse cx={-4} cy={-11} rx={2.4} ry={6.5} fill="#fff" />
-      <ellipse cx={4} cy={-11} rx={2.4} ry={6.5} fill="#fff" />
-      <ellipse cx={-4} cy={-11} rx={1.1} ry={3.6} fill="#FFC2D6" />
-      <ellipse cx={4} cy={-11} rx={1.1} ry={3.6} fill="#FFC2D6" />
-      <circle cx={0} cy={0} r={7.5} fill="#fff" />
-      <circle cx={-2.7} cy={-1} r={1} fill="#5b4b6b" />
-      <circle cx={2.7} cy={-1} r={1} fill="#5b4b6b" />
-      <circle cx={-4.2} cy={1.8} r={1.5} fill="#FFC2D6" />
-      <circle cx={4.2} cy={1.8} r={1.5} fill="#FFC2D6" />
-      <path d="M-1 1 h2 l-1 1.3 z" fill="#FF9DBE" />
-    </g>
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+      <rect x="5" y="11" width="14" height="10" rx="2.5" fill="#B6AECB" />
+      <path d="M8 11V7a4 4 0 0 1 8 0v4" stroke="#9D94BA" strokeWidth="2.2" strokeLinecap="round" />
+    </svg>
   );
 }
-function SvgCarrot({ x, y, s = 1, r = 0 }: { x: number; y: number; s?: number; r?: number }) {
+
+function CrownIcon() {
   return (
-    <g transform={`translate(${x} ${y}) scale(${s}) rotate(${r})`}>
-      <polygon points="0,9 -3.2,-3 3.2,-3" fill="#FF9D3D" />
-      <polygon points="0,9 0,-3 3.2,-3" fill="#F4862B" />
-      <path d="M0 -3 l-2.4 -4.5 M0 -3 l0 -5.5 M0 -3 l2.4 -4.5" stroke="#5FB85F" strokeWidth={1.4} fill="none" strokeLinecap="round" />
-    </g>
+    <svg width="16" height="13" viewBox="0 0 24 20" fill="none">
+      <path d="M3 18h18M4 18L2 6l5.5 5L12 2l4.5 9L22 6l-2 12H4Z"
+        fill="#FFD23D" stroke="#FFB020" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" />
+    </svg>
   );
 }
-function SvgStar({ x, y, s = 1, fill = '#FFD23D' }: { x: number; y: number; s?: number; fill?: string }) {
-  const pts = '0,-6 1.8,-1.9 6,-1.9 2.6,1 3.7,5.2 0,2.6 -3.7,5.2 -2.6,1 -6,-1.9 -1.8,-1.9';
-  return <polygon points={pts} fill={fill} transform={`translate(${x} ${y}) scale(${s})`} />;
+
+function StarShape({ size = 24, color = '#FFD23D' }: { size?: number; color?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24"
+      style={{ filter: color !== '#E2D9F0' ? `drop-shadow(0 1px 4px rgba(255,180,40,0.55))` : 'none' }}>
+      <polygon
+        points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"
+        fill={color} />
+    </svg>
+  );
+}
+
+function TrophyIcon({ size = 52 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 52 52" fill="none">
+      <path d="M16 6h20v22a10 10 0 0 1-20 0V6Z" fill="#FFD23D" stroke="#FFA000" strokeWidth="1.5" />
+      <path d="M7 10h9v12a9 9 0 0 1-9-9V10Z" fill="#FFD23D" stroke="#FFA000" strokeWidth="1.5" />
+      <path d="M45 10h-9v12a9 9 0 0 0 9-9V10Z" fill="#FFD23D" stroke="#FFA000" strokeWidth="1.5" />
+      <rect x="22" y="28" width="8" height="10" fill="#FFD23D" stroke="#FFA000" strokeWidth="1.5" />
+      <rect x="16" y="38" width="20" height="4" rx="2" fill="#E09820" stroke="#FFA000" strokeWidth="1.5" />
+      <polygon points="26,10 27.8,16 33.2,16 28.8,19.6 30.2,25 26,21.8 21.8,25 23.2,19.6 18.8,16 24.2,16"
+        fill="#FFA000" opacity="0.45" />
+    </svg>
+  );
+}
+
+function CelebrationBurst({ size = 52 }: { size?: number }) {
+  const colors = ['#FF9DC4', '#A88CFF', '#FFD23D', '#9BE0A8', '#8FC8F0', '#FF9D3D', '#A88CFF', '#FF9DC4'];
+  return (
+    <svg width={size} height={size} viewBox="0 0 52 52" fill="none">
+      {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => {
+        const rad = (angle * Math.PI) / 180;
+        const x1 = 26 + 10 * Math.cos(rad), y1 = 26 + 10 * Math.sin(rad);
+        const x2 = 26 + 20 * Math.cos(rad), y2 = 26 + 20 * Math.sin(rad);
+        return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke={colors[i]} strokeWidth="3" strokeLinecap="round" />;
+      })}
+      <circle cx="26" cy="26" r="9" fill="#FFE9A8" stroke="#FFD23D" strokeWidth="1.5" />
+      <polygon points="26,19 27.6,23.4 32,23.4 28.7,26 29.9,30.4 26,28 22.1,30.4 23.3,26 20,23.4 24.4,23.4"
+        fill="#FFD23D" />
+    </svg>
+  );
+}
+
+/* Realistic carrot using SVG */
+function CarrotItem({ rotate }: { rotate: number }) {
+  return (
+    <div style={{ display: 'inline-block', transform: `rotate(${rotate}deg)`, lineHeight: 0 }}>
+      <svg width="26" height="50" viewBox="-2 -10 28 52" fill="none">
+        <path d="M12 38 C12 38 4 18 4 8 C4 2 8 0 12 0 C16 0 20 2 20 8 C20 18 12 38 12 38Z" fill="#FF7A1E" />
+        <path d="M12 38 C12 38 12 18 14 8 C15 3 18 3 20 8 C20 18 12 38 12 38Z" fill="#C45500" opacity="0.3" />
+        <line x1="12" y1="0" x2="8" y2="-8" stroke="#4EAA4E" strokeWidth="2" strokeLinecap="round" />
+        <line x1="12" y1="0" x2="12" y2="-10" stroke="#4EAA4E" strokeWidth="2" strokeLinecap="round" />
+        <line x1="12" y1="0" x2="16" y2="-8" stroke="#4EAA4E" strokeWidth="2" strokeLinecap="round" />
+      </svg>
+    </div>
+  );
+}
+
+/* Small circular Sia avatar */
+function SiaAvatar({ size = 44, border = '#A88CFF' }: { size?: number; border?: string }) {
+  return (
+    <div className="relative rounded-full overflow-hidden shrink-0"
+      style={{ width: size, height: size, border: `2.5px solid ${border}`, boxShadow: '0 2px 10px rgba(168,140,255,0.35)' }}>
+      <Image src="/images/sia-character.webp" alt="Sia" fill className="object-cover object-top" sizes={`${size}px`} />
+    </div>
+  );
 }
 
 /* ════════════════════════════════════════════════════════════════
-   Thumbnails (illustrated, no emojis)
+   Thumbnails — custom illustrated game art
    ════════════════════════════════════════════════════════════════ */
-const Svg = ({ children }: { children: React.ReactNode }) => (
-  <svg viewBox="0 0 100 75" preserveAspectRatio="xMidYMid slice" className="w-full h-full">{children}</svg>
-);
-
 function ThumbCarrotTap() {
-  return (
-    <Svg>
-      <defs><linearGradient id="ctg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#FFEFC8" /><stop offset="1" stopColor="#FFD79A" /></linearGradient></defs>
-      <rect width="100" height="75" fill="url(#ctg)" />
-      <ellipse cx="50" cy="86" rx="78" ry="26" fill="#9DD96F" />
-      <ellipse cx="22" cy="60" rx="11" ry="5" fill="#7A5A3A" />
-      <ellipse cx="74" cy="63" rx="11" ry="5" fill="#7A5A3A" />
-      <SvgBunny x={22} y={50} s={1.05} />
-      <SvgCarrot x={74} y={56} s={1.1} r={-8} />
-      <SvgCarrot x={50} y={66} s={1.2} r={10} />
-    </Svg>
-  );
+  return <Image src="/images/games/carrot-tap.webp" alt="Carrot Tap" fill className="object-cover object-center" sizes="250px" />;
 }
 function ThumbBubblePop() {
-  const b: [number, number, number, string][] = [[20, 50, 9, '#FF9DC4'], [42, 30, 12, '#A88CFF'], [64, 48, 10, '#8FC8F0'], [80, 26, 8, '#9BE0A8'], [33, 60, 7, '#FFD36B']];
-  return (
-    <Svg>
-      <defs><linearGradient id="bpg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#EAF6FF" /><stop offset="1" stopColor="#C7E6FB" /></linearGradient></defs>
-      <rect width="100" height="75" fill="url(#bpg)" />
-      {b.map((v, i) => (
-        <g key={i}>
-          <circle cx={v[0]} cy={v[1]} r={v[2]} fill={v[3]} opacity={0.55} />
-          <circle cx={v[0] - v[2] * 0.3} cy={v[1] - v[2] * 0.35} r={v[2] * 0.28} fill="#fff" opacity={0.85} />
-        </g>
-      ))}
-    </Svg>
-  );
+  return <Image src="/images/games/bubble-pop.webp" alt="Bubble Pop" fill className="object-cover object-center" sizes="250px" />;
 }
 function ThumbMemory() {
-  const cards: [number, number, string | null][] = [[16, 16, '#FF9DC4'], [42, 12, '#A88CFF'], [60, 18, null], [16, 42, null], [42, 40, '#8FC8F0'], [68, 44, '#9BE0A8']];
-  return (
-    <Svg>
-      <rect width="100" height="75" fill="#EDE3FF" />
-      {cards.map((c, i) => (
-        <g key={i}>
-          <rect x={c[0]} y={c[1]} width="22" height="26" rx="5" fill={c[2] ? '#FFFCF6' : '#A88CFF'} stroke="#fff" strokeWidth="1.5" />
-          {c[2]
-            ? <circle cx={c[0] + 11} cy={c[1] + 13} r="6" fill={c[2]} />
-            : <text x={c[0] + 11} y={c[1] + 18} fontSize="12" fill="#fff" textAnchor="middle" fontWeight="bold">?</text>}
-        </g>
-      ))}
-    </Svg>
-  );
+  return <Image src="/images/games/memory-match.webp" alt="Memory Match" fill className="object-cover object-center" sizes="250px" />;
 }
 function ThumbCount() {
-  return (
-    <Svg>
-      <defs><linearGradient id="cng" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#FFF1F7" /><stop offset="1" stopColor="#FFD9EA" /></linearGradient></defs>
-      <rect width="100" height="75" fill="url(#cng)" />
-      {[18, 34, 50, 66].map((x, i) => <SvgCarrot key={i} x={x} y={40} s={1.25} r={i % 2 ? 9 : -9} />)}
-      <rect x="74" y="22" width="20" height="20" rx="6" fill="#A88CFF" />
-      <text x="84" y="37" fontSize="13" fill="#fff" textAnchor="middle" fontWeight="bold">4</text>
-    </Svg>
-  );
+  return <Image src="/images/games/count-with-sia.webp" alt="Count with Sia" fill className="object-cover object-center" sizes="250px" />;
 }
 function ThumbStarCatch() {
-  return (
-    <Svg>
-      <defs><linearGradient id="scg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#3A2E6E" /><stop offset="1" stopColor="#6A53A8" /></linearGradient></defs>
-      <rect width="100" height="75" fill="url(#scg)" />
-      <SvgStar x={24} y={20} s={1.3} /><SvgStar x={54} y={14} s={1} fill="#FFE89A" /><SvgStar x={78} y={26} s={1.5} />
-      <SvgStar x={40} y={34} s={0.9} fill="#FFF1B8" /><SvgStar x={66} y={42} s={1.1} />
-      <path d="M30 60 L70 60 L64 74 L36 74 Z" fill="#C98A4A" />
-      <rect x="28" y="56" width="44" height="6" rx="3" fill="#E0A35E" />
-    </Svg>
-  );
+  return <Image src="/images/games/star-catch.webp" alt="Star Catch" fill className="object-cover object-center" sizes="250px" />;
 }
 function ThumbColorTap() {
-  const cols = ['#FF6B6B', '#FFC83D', '#5FC36A', '#5B9DF0', '#A88CFF', '#FF9DC4'];
-  return (
-    <Svg>
-      <rect width="100" height="75" fill="#FBF3FF" />
-      <path d="M50 8 C24 8 12 28 12 44 C12 58 26 60 32 54 C38 48 30 44 38 40 C50 34 64 50 74 44 C86 37 80 8 50 8 Z" fill="#fff" stroke="#E7DAF7" strokeWidth="1.5" />
-      {cols.map((c, i) => {
-        const a = (i / cols.length) * Math.PI * 1.3 + 0.3;
-        return <circle key={i} cx={44 + Math.cos(a) * 22} cy={34 + Math.sin(a) * 16} r="5.5" fill={c} />;
-      })}
-      <circle cx="70" cy="58" r="8" fill="#FFC83D" stroke="#fff" strokeWidth="2" />
-    </Svg>
-  );
+  return <Image src="/images/games/colour-tap.webp" alt="Colour Tap" fill className="object-cover object-center" sizes="250px" />;
 }
 function ThumbOddOne() {
-  const base = '#8FC8F0', odd = '#FF9DC4', oddIdx = 4;
-  return (
-    <Svg>
-      <rect width="100" height="75" fill="#EAF6FF" />
-      {[0, 1, 2, 3, 4, 5, 6, 7, 8].map(i => {
-        const cx = 24 + (i % 3) * 26, cy = 16 + Math.floor(i / 3) * 22;
-        return <circle key={i} cx={cx} cy={cy} r="9" fill={i === oddIdx ? odd : base} stroke="#fff" strokeWidth="1.5" />;
-      })}
-    </Svg>
-  );
+  return <Image src="/images/games/odd-one-out.webp" alt="Odd One Out" fill className="object-cover object-center" sizes="250px" />;
 }
 
 /* ════════════════════════════════════════════════════════════════
@@ -199,15 +178,15 @@ function StarRow({ n, size = 26 }: { n: number; size?: number }) {
   return (
     <div className="flex items-center justify-center gap-1.5">
       {[0, 1, 2].map(i => (
-        <motion.span key={i} initial={{ scale: 0, rotate: -40 }} animate={{ scale: 1, rotate: 0 }}
-          transition={{ delay: 0.15 + i * 0.18, type: 'spring', stiffness: 260, damping: 12 }}
-          style={{ fontSize: size, lineHeight: 1, color: i < n ? '#FFC83D' : '#E2D9F0', filter: i < n ? 'drop-shadow(0 2px 4px rgba(255,200,61,0.5))' : 'none' }}>★</motion.span>
+        <motion.div key={i} initial={{ scale: 0, rotate: -40 }} animate={{ scale: 1, rotate: 0 }}
+          transition={{ delay: 0.15 + i * 0.18, type: 'spring', stiffness: 260, damping: 12 }}>
+          <StarShape size={size} color={i < n ? '#FFC83D' : '#E2D9F0'} />
+        </motion.div>
       ))}
     </div>
   );
 }
 
-/* Popping score + live timer bar */
 function HUD({ score, time, max, goal }: { score: number; time: number; max: number; goal?: number }) {
   const pct = Math.max(0, (time / max) * 100);
   const low = time <= 5;
@@ -216,10 +195,13 @@ function HUD({ score, time, max, goal }: { score: number; time: number; max: num
       <div className="flex items-center justify-between px-1 mb-1.5">
         <div className="flex items-baseline gap-1.5">
           <motion.span key={score} initial={{ scale: 1.5 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 360, damping: 14 }}
-            className="font-display text-[1.15rem]" style={{ fontWeight: 700, color: '#FFB020' }}>⭐ {score}</motion.span>
-          {goal !== undefined && <span className="font-body text-[0.7rem] text-[#B6AECB]">/ {goal} for ★★★</span>}
+            className="font-display text-[1.15rem]" style={{ fontWeight: 700, color: '#FFB020' }}>{score} pts</motion.span>
+          {goal !== undefined && <span className="font-body text-[0.7rem] text-[#B6AECB]">/ {goal} for </span>}
+          {goal !== undefined && <StarShape size={13} color="#B6AECB" />}
+          {goal !== undefined && <StarShape size={13} color="#B6AECB" />}
+          {goal !== undefined && <StarShape size={13} color="#B6AECB" />}
         </div>
-        <span className="font-display text-[0.95rem]" style={{ fontWeight: 700, color: low ? '#FF6B6B' : '#A88CFF' }}>⏱ {time}s</span>
+        <span className="font-display text-[0.95rem]" style={{ fontWeight: 700, color: low ? '#FF6B6B' : '#A88CFF' }}>{time}s</span>
       </div>
       <div className="h-2.5 rounded-full overflow-hidden" style={{ background: 'rgba(168,140,255,0.16)' }}>
         <motion.div animate={{ width: `${pct}%` }} transition={{ ease: 'linear', duration: 0.9 }} className="h-full rounded-full"
@@ -229,7 +211,6 @@ function HUD({ score, time, max, goal }: { score: number; time: number; max: num
   );
 }
 
-/* floating "+1" feedback */
 type Float = { id: number; x: number; y: number };
 function Floats({ items }: { items: Float[] }) {
   return (
@@ -253,7 +234,6 @@ function useFloats() {
   return { items, add };
 }
 
-/* celebratory confetti for the result screen */
 const CONFETTI_C = ['#FF9DC4', '#A88CFF', '#8FC8F0', '#9BE0A8', '#FFD36B', '#FF6B6B'];
 function Confetti() {
   return (
@@ -271,7 +251,7 @@ function Confetti() {
 }
 
 /* ════════════════════════════════════════════════════════════════
-   GAME 1 — Carrot Tap (whack-a-mole)
+   GAME 1 Carrot Tap — Sia pops up instead of a bunny emoji
    ════════════════════════════════════════════════════════════════ */
 const CT = [{ t: 22, s: 820, h: 680, g: 12 }, { t: 22, s: 700, h: 560, g: 16 }, { t: 20, s: 600, h: 470, g: 20 }, { t: 20, s: 500, h: 390, g: 24 }, { t: 18, s: 420, h: 320, g: 28 }];
 function CarrotTap({ level, onFinish }: GameProps) {
@@ -307,8 +287,15 @@ function CarrotTap({ level, onFinish }: GameProps) {
             <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-[72%] h-[32%] rounded-[50%]" style={{ background: '#6B5896' }} />
             <AnimatePresence>
               {active === i && (
-                <motion.div key="b" initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 40, opacity: 0 }}
-                  transition={{ type: 'spring', stiffness: 440, damping: 20 }} className="relative z-10 text-[2.5rem] mb-1 pointer-events-none select-none">🐰</motion.div>
+                <motion.div key="b" initial={{ y: 44, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 44, opacity: 0 }}
+                  transition={{ type: 'spring', stiffness: 440, damping: 20 }}
+                  className="relative z-10 mb-1 pointer-events-none"
+                  style={{ width: 44, height: 44 }}>
+                  <div className="relative w-full h-full rounded-full overflow-hidden border-2 border-white"
+                    style={{ boxShadow: '0 2px 8px rgba(168,140,255,0.45)' }}>
+                    <Image src="/images/sia-character.webp" alt="Sia" fill className="object-cover object-top" sizes="44px" />
+                  </div>
+                </motion.div>
               )}
             </AnimatePresence>
           </button>
@@ -320,7 +307,7 @@ function CarrotTap({ level, onFinish }: GameProps) {
 }
 
 /* ════════════════════════════════════════════════════════════════
-   GAME 2 — Bubble Pop
+   GAME 2 Bubble Pop
    ════════════════════════════════════════════════════════════════ */
 const BP = [{ t: 22, s: 600, g: 16 }, { t: 22, s: 520, g: 20 }, { t: 20, s: 450, g: 24 }, { t: 20, s: 380, g: 28 }, { t: 18, s: 320, g: 32 }];
 const BCOL = ['#FF9DC4', '#A88CFF', '#8FC8F0', '#9BE0A8', '#FFD36B'];
@@ -368,10 +355,19 @@ function BubblePop({ level, onFinish }: GameProps) {
 }
 
 /* ════════════════════════════════════════════════════════════════
-   GAME 3 — Memory Match
+   GAME 3 Memory Match — character photo cards
    ════════════════════════════════════════════════════════════════ */
-const MM = [4, 6, 7, 8, 8]; // pairs per level
-const FACES = ['🐰', '🦊', '🐻', '🐸', '🦉', '🐿️', '🦔', '🐱'];
+const MM = [4, 6, 7, 8, 8];
+const FACES = [
+  '/images/sia-character.webp',
+  '/images/milo-solo.webp',
+  '/images/arlo-solo.webp',
+  '/images/sia-meet.webp',
+  '/images/sia-milo.jpeg',
+  '/images/sia-arlo.jpeg',
+  '/images/sia-outdoor.jpeg',
+  '/images/sia-indoor.jpeg',
+];
 function MemoryMatch({ level, onFinish }: GameProps) {
   const pairs = MM[level - 1];
   const [cards, setCards] = useState<{ id: number; f: string; m: boolean }[]>([]);
@@ -409,15 +405,22 @@ function MemoryMatch({ level, onFinish }: GameProps) {
 
   return (
     <div>
-      <Bar left={`🔁 ${moves} moves`} right={`${cards.filter(c => c.m).length / 2}/${pairs}`} />
+      <Bar left={`↺ ${moves} moves`} right={`${cards.filter(c => c.m).length / 2}/${pairs} matched`} />
       <div className="grid gap-2" style={{ gridTemplateColumns: 'repeat(4,1fr)' }}>
         {cards.map(c => {
           const shown = c.m || flip.includes(c.id);
           return (
-            <button key={c.id} onClick={() => tap(c.id)} className="relative aspect-square rounded-[14px] flex items-center justify-center text-[1.5rem] transition-all duration-200"
-              style={{ background: shown ? '#FFFCF6' : 'linear-gradient(135deg,#C9B6F5,#A88CFF)', border: shown ? '2px solid #EADCFF' : '2px solid rgba(255,255,255,0.6)',
-                boxShadow: c.m ? '0 0 0 3px rgba(155,224,168,0.7)' : '0 4px 12px rgba(168,140,255,0.18)', transform: c.m ? 'scale(0.95)' : 'scale(1)' }}>
-              {shown ? c.f : <span className="text-white text-[1.1rem]">?</span>}
+            <button key={c.id} onClick={() => tap(c.id)} className="relative aspect-square rounded-[14px] overflow-hidden transition-all duration-200"
+              style={{
+                background: shown ? '#FFFCF6' : 'linear-gradient(135deg,#C9B6F5,#A88CFF)',
+                border: shown ? '2px solid #EADCFF' : '2px solid rgba(255,255,255,0.6)',
+                boxShadow: c.m ? '0 0 0 3px rgba(155,224,168,0.7)' : '0 4px 12px rgba(168,140,255,0.18)',
+                transform: c.m ? 'scale(0.95)' : 'scale(1)',
+              }}>
+              {shown
+                ? <Image src={c.f} alt="character" fill className="object-cover object-top" sizes="80px" />
+                : <span className="absolute inset-0 flex items-center justify-center text-white font-display text-[1.1rem]" style={{ fontWeight: 700 }}>?</span>
+              }
             </button>
           );
         })}
@@ -427,7 +430,7 @@ function MemoryMatch({ level, onFinish }: GameProps) {
 }
 
 /* ════════════════════════════════════════════════════════════════
-   GAME 4 — Count with Sia
+   GAME 4 Count with Sia — carrot SVG illustrations
    ════════════════════════════════════════════════════════════════ */
 const CN = [{ max: 6, sp: 1 }, { max: 8, sp: 1 }, { max: 10, sp: 1 }, { max: 12, sp: 2 }, { max: 15, sp: 2 }];
 const CN_ROUNDS = 8;
@@ -458,11 +461,13 @@ function CountWithSia({ level, onFinish }: GameProps) {
   };
   return (
     <div>
-      <Bar left={`⭐ ${score}`} right={`Round ${round}/${CN_ROUNDS}`} />
-      <div className="rounded-[20px] p-4 mb-4 flex flex-wrap items-center justify-center gap-1.5 min-h-[150px]" style={{ background: 'linear-gradient(180deg,#FFF4F9,#FFE6F1)' }}>
+      <Bar left={`Score: ${score}`} right={`Round ${round}/${CN_ROUNDS}`} />
+      <div className="rounded-[20px] p-4 mb-4 flex flex-wrap items-center justify-center gap-1 min-h-[150px]" style={{ background: 'linear-gradient(180deg,#FFF4F9,#FFE6F1)' }}>
         {Array.from({ length: n }).map((_, i) => (
-          <motion.span key={`${round}-${i}`} initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: i * 0.05, type: 'spring', stiffness: 320, damping: 16 }}
-            className="text-[1.9rem]" style={{ transform: `rotate(${(i % 2 ? 1 : -1) * 8}deg)` }}>🥕</motion.span>
+          <motion.div key={`${round}-${i}`} initial={{ scale: 0 }} animate={{ scale: 1 }}
+            transition={{ delay: i * 0.05, type: 'spring', stiffness: 320, damping: 16 }}>
+            <CarrotItem rotate={(i % 2 ? 1 : -1) * 8} />
+          </motion.div>
         ))}
       </div>
       <p className="text-center font-body text-[0.95rem] text-[#8B86A0] mb-3">How many carrots?</p>
@@ -478,7 +483,7 @@ function CountWithSia({ level, onFinish }: GameProps) {
 }
 
 /* ════════════════════════════════════════════════════════════════
-   GAME 5 — Star Catch (falling stars)
+   GAME 5 Star Catch — SVG polygon stars, no text chars
    ════════════════════════════════════════════════════════════════ */
 const SC = [{ t: 22, s: 780, fall: 4.0, g: 12 }, { t: 22, s: 680, fall: 3.5, g: 15 }, { t: 20, s: 580, fall: 3.0, g: 18 }, { t: 20, s: 500, fall: 2.6, g: 21 }, { t: 18, s: 420, fall: 2.2, g: 24 }];
 function StarCatch({ level, onFinish }: GameProps) {
@@ -493,7 +498,7 @@ function StarCatch({ level, onFinish }: GameProps) {
     if (time <= 0) { if (!done.current) { done.current = true; setStars([]); onFinish({ stars: starsBy(score, c.g), scoreText: `${score} stars` }); } return; }
     const t = setTimeout(() => setTime(v => v - 1), 1000); return () => clearTimeout(t);
   }, [time]); // eslint-disable-line
-  useEffect(() => { const iv = setInterval(() => setStars(s => [...s, { id: idr.current++, x: 6 + Math.random() * 80, sz: 30 + Math.random() * 18 }]), c.s); return () => clearInterval(iv); }, []); // eslint-disable-line
+  useEffect(() => { const iv = setInterval(() => setStars(s => [...s, { id: idr.current++, x: 6 + Math.random() * 80, sz: 32 + Math.random() * 18 }]), c.s); return () => clearInterval(iv); }, []); // eslint-disable-line
   const rm = (id: number) => setStars(s => s.filter(x => x.id !== id));
   const grab = (e: React.MouseEvent, id: number) => {
     if (!done.current) {
@@ -506,13 +511,20 @@ function StarCatch({ level, onFinish }: GameProps) {
     <div ref={wrap} className="relative">
       <HUD score={score} time={time} max={c.t} goal={c.g} />
       <div className="relative rounded-[20px] overflow-hidden" style={{ height: 400, background: 'linear-gradient(180deg,#3A2E6E,#6A53A8)' }}>
-        {/* twinkle backdrop */}
-        {[12, 30, 52, 70, 86].map((x, i) => <span key={i} className="absolute text-white/40 text-[0.6rem]" style={{ left: `${x}%`, top: `${10 + (i % 3) * 22}%` }}>✦</span>)}
+        {/* subtle twinkle dots */}
+        {[12, 30, 52, 70, 86].map((x, i) => (
+          <div key={i} className="absolute rounded-full" style={{ left: `${x}%`, top: `${10 + (i % 3) * 22}%`, width: i % 2 ? 3 : 4, height: i % 2 ? 3 : 4, background: 'rgba(255,255,255,0.35)', animation: `twinkle ${2 + (i % 3)}s ease-in-out infinite`, animationDelay: `${i * 0.4}s` }} />
+        ))}
         <AnimatePresence>
           {stars.map(s => (
-            <motion.button key={s.id} onClick={(e) => grab(e, s.id)} initial={{ y: -s.sz, opacity: 0, rotate: 0 }} animate={{ y: 420, opacity: 1, rotate: 60 }} exit={{ scale: 0, opacity: 0 }}
-              transition={{ y: { duration: c.fall, ease: 'linear' }, rotate: { duration: c.fall, ease: 'linear' }, opacity: { duration: 0.25 }, scale: { duration: 0.15 } }} onAnimationComplete={() => rm(s.id)}
-              className="absolute" style={{ left: `${s.x}%`, top: 0, width: s.sz, height: s.sz, lineHeight: 1, fontSize: s.sz, color: '#FFD23D', filter: 'drop-shadow(0 0 6px rgba(255,210,60,0.8))' }}>★</motion.button>
+            <motion.button key={s.id} onClick={(e) => grab(e, s.id)}
+              initial={{ y: -s.sz, opacity: 0, rotate: 0 }} animate={{ y: 420, opacity: 1, rotate: 180 }} exit={{ scale: 0, opacity: 0 }}
+              transition={{ y: { duration: c.fall, ease: 'linear' }, rotate: { duration: c.fall, ease: 'linear' }, opacity: { duration: 0.25 }, scale: { duration: 0.15 } }}
+              onAnimationComplete={() => rm(s.id)}
+              className="absolute flex items-center justify-center"
+              style={{ left: `${s.x}%`, top: 0, width: s.sz, height: s.sz }}>
+              <StarShape size={s.sz} color="#FFD23D" />
+            </motion.button>
           ))}
         </AnimatePresence>
       </div>
@@ -522,7 +534,7 @@ function StarCatch({ level, onFinish }: GameProps) {
 }
 
 /* ════════════════════════════════════════════════════════════════
-   GAME 6 — Colour Tap
+   GAME 6 Colour Tap
    ════════════════════════════════════════════════════════════════ */
 const PALETTE = [{ n: 'Red', c: '#FF6B6B' }, { n: 'Blue', c: '#5B9DF0' }, { n: 'Green', c: '#5FC36A' }, { n: 'Yellow', c: '#FFC83D' }, { n: 'Purple', c: '#A88CFF' }, { n: 'Pink', c: '#FF9DC4' }, { n: 'Orange', c: '#FF9D3D' }];
 const COLOR_CHOICES = [3, 4, 5, 6, 6];
@@ -549,7 +561,7 @@ function ColorTap({ level, onFinish }: GameProps) {
   };
   return (
     <div>
-      <Bar left={`⭐ ${score}`} right={`Round ${round}/${COLOR_ROUNDS}`} />
+      <Bar left={`Score: ${score}`} right={`Round ${round}/${COLOR_ROUNDS}`} />
       <div className="flex flex-col items-center mb-5">
         <p className="font-body text-[0.95rem] text-[#8B86A0] mb-2">Tap the colour:</p>
         <div className="font-display text-[1.5rem]" style={{ fontWeight: 700, color: target.c }}>{target.n}</div>
@@ -566,7 +578,7 @@ function ColorTap({ level, onFinish }: GameProps) {
 }
 
 /* ════════════════════════════════════════════════════════════════
-   GAME 7 — Odd One Out
+   GAME 7 Odd One Out
    ════════════════════════════════════════════════════════════════ */
 const ODD_COLS = [3, 3, 4, 4, 5]; const ODD_ROWS = [2, 3, 3, 4, 4];
 const ODD_ROUNDS = 8;
@@ -589,7 +601,6 @@ function OddOneOut({ level, onFinish }: GameProps) {
   const done = useRef(false);
   const make = (r: number) => {
     const b = ODD_BASES[Math.floor(Math.random() * ODD_BASES.length)];
-    // higher levels: the odd one is only a subtle shade away (much harder)
     const o = level >= 4 ? shade(b, (Math.random() < 0.5 ? 1 : -1) * (level === 5 ? 26 : 36)) : shuffle(ODD_ODDS.filter(x => x !== b))[0];
     setBase(b); setOdd(o); setOddIdx(Math.floor(Math.random() * n)); setPicked(null); setRound(r);
   };
@@ -603,7 +614,7 @@ function OddOneOut({ level, onFinish }: GameProps) {
   };
   return (
     <div>
-      <Bar left={`⭐ ${score}`} right={`Round ${round}/${ODD_ROUNDS}`} />
+      <Bar left={`Score: ${score}`} right={`Round ${round}/${ODD_ROUNDS}`} />
       <p className="text-center font-body text-[0.95rem] text-[#8B86A0] mb-3">Tap the one that&apos;s different!</p>
       <div className="grid gap-2.5 justify-center mx-auto" style={{ gridTemplateColumns: `repeat(${cols},minmax(0,1fr))`, maxWidth: cols * 76 }}>
         {Array.from({ length: n }).map((_, i) => {
@@ -631,12 +642,11 @@ const GAMES: GameDef[] = [
 ];
 
 /* ════════════════════════════════════════════════════════════════
-   Candy-Crush level map
+   Level map
    ════════════════════════════════════════════════════════════════ */
-const NODE_X = [50, 26, 66, 30, 64, 46];          // % (6th = coming soon)
-const NODE_Y = [40, 116, 192, 268, 344, 424];     // px
+const NODE_X = [50, 26, 66, 30, 64, 46];
+const NODE_Y = [40, 116, 192, 268, 344, 424];
 
-// fluffy little cloud
 function MapCloud({ style }: { style: React.CSSProperties }) {
   return (
     <div className="absolute z-0 pointer-events-none" style={{ filter: 'drop-shadow(0 4px 6px rgba(150,130,200,0.12))', ...style }}>
@@ -649,7 +659,7 @@ function MapCloud({ style }: { style: React.CSSProperties }) {
     </div>
   );
 }
-// dots along a smooth snake path through the nodes
+
 function trailDots() {
   const dots: { x: number; y: number; seg: number }[] = [];
   const per = 7;
@@ -678,19 +688,18 @@ function LevelMap({ def, prog, onPick }: { def: GameDef; prog: Progress; onPick:
       style={{ maxWidth: 500, background: 'linear-gradient(180deg,#E6F0FF 0%,#F0E8FF 48%,#FCE7F2 100%)' }}>
 
       <div className="relative z-10 text-center pt-3.5 pb-1 font-display text-[1rem]" style={{ fontWeight: 700, color: '#7A5CC8' }}>
-        🐾 Choose a level!
+        Choose a level!
       </div>
 
       <div className="relative" style={{ height: mapH }}>
-        {/* clouds */}
         {clouds.map((c, i) => (
           <div key={i} style={{ position: 'absolute', top: c.top, left: (c as any).left, right: (c as any).right, animation: `float ${5 + i}s ease-in-out infinite`, animationDelay: `${i * 0.7}s` }}>
             <MapCloud style={{ position: 'relative' }} />
           </div>
         ))}
-        {/* twinkles */}
+        {/* small diamond sparkles instead of text chars */}
         {twinkles.map(([l, t], i) => (
-          <span key={i} className="absolute z-0 text-[#C7B4F2]" style={{ left: l, top: t, fontSize: i % 2 ? 12 : 15, animation: `twinkle ${2 + (i % 3)}s ease-in-out infinite`, animationDelay: `${i * 0.4}s` }}>✦</span>
+          <div key={i} className="absolute z-0" style={{ left: l, top: t, width: i % 2 ? 8 : 10, height: i % 2 ? 8 : 10, background: '#C7B4F2', borderRadius: 2, transform: 'rotate(45deg)', opacity: 0.6, animation: `twinkle ${2 + (i % 3)}s ease-in-out infinite`, animationDelay: `${i * 0.4}s` }} />
         ))}
 
         {/* dotted candy trail */}
@@ -716,19 +725,25 @@ function LevelMap({ def, prog, onPick }: { def: GameDef; prog: Progress; onPick:
             <motion.div key={lvl} className="absolute z-10 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center"
               style={{ left: `${NODE_X[i]}%`, top: NODE_Y[i] }}
               initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.1 + i * 0.1, type: 'spring', stiffness: 280, damping: 16 }}>
-              {/* bouncing bunny over current */}
+
+              {/* Sia avatar above current level */}
               {current && (
-                <motion.div animate={{ y: [0, -5, 0] }} transition={{ duration: 1, repeat: Infinity }} className="text-[1.2rem] mb-0.5">🐰</motion.div>
+                <motion.div animate={{ y: [0, -5, 0] }} transition={{ duration: 1, repeat: Infinity }} className="mb-0.5">
+                  <SiaAvatar size={26} border="#A88CFF" />
+                </motion.div>
               )}
-              {/* stars */}
+
+              {/* star row */}
               <div className="flex gap-0.5 mb-1" style={{ height: 13 }}>
                 {completed && [0, 1, 2].map(s => (
-                  <motion.span key={s} initial={{ scale: 0, y: -6 }} animate={{ scale: 1, y: 0 }} transition={{ delay: 0.3 + i * 0.1 + s * 0.08, type: 'spring', stiffness: 300, damping: 12 }}
-                    style={{ fontSize: 12, lineHeight: 1, color: s < earned ? '#FFC83D' : '#E0D6F0', filter: s < earned ? 'drop-shadow(0 1px 2px rgba(255,200,61,0.6))' : 'none' }}>★</motion.span>
+                  <motion.div key={s} initial={{ scale: 0, y: -6 }} animate={{ scale: 1, y: 0 }}
+                    transition={{ delay: 0.3 + i * 0.1 + s * 0.08, type: 'spring', stiffness: 300, damping: 12 }}>
+                    <StarShape size={12} color={s < earned ? '#FFC83D' : '#E0D6F0'} />
+                  </motion.div>
                 ))}
               </div>
+
               <div className="relative">
-                {/* pulsing glow ring for current */}
                 {current && (
                   <motion.div className="absolute inset-0 rounded-full" style={{ background: 'radial-gradient(circle,rgba(168,140,255,0.5),transparent 70%)' }}
                     animate={{ scale: [1, 1.6], opacity: [0.6, 0] }} transition={{ duration: 1.5, repeat: Infinity }} />
@@ -745,11 +760,11 @@ function LevelMap({ def, prog, onPick }: { def: GameDef; prog: Progress; onPick:
                     boxShadow: unlocked ? '0 8px 20px rgba(168,140,255,0.4)' : 'inset 0 2px 6px rgba(0,0,0,0.08)',
                     border: '4px solid #fff', cursor: unlocked ? 'pointer' : 'default',
                   }}>
-                  {unlocked ? lvl : '🔒'}
-                  {completed && <span className="absolute -top-1 -right-1 text-[0.85rem]">👑</span>}
+                  {unlocked ? lvl : <LockIcon size={20} />}
+                  {completed && <span className="absolute -top-1 -right-1"><CrownIcon /></span>}
                 </motion.button>
               </div>
-              {current && <span className="mt-1 font-body font-bold text-[0.6rem] px-2 py-0.5 rounded-full text-white" style={{ background: 'linear-gradient(135deg,#A88CFF,#FF9DC4)' }}>PLAY ▶</span>}
+              {current && <span className="mt-1 font-body font-bold text-[0.6rem] px-2 py-0.5 rounded-full text-white" style={{ background: 'linear-gradient(135deg,#A88CFF,#FF9DC4)' }}>PLAY</span>}
             </motion.div>
           );
         })}
@@ -757,9 +772,11 @@ function LevelMap({ def, prog, onPick }: { def: GameDef; prog: Progress; onPick:
         {/* Coming soon node */}
         <motion.div className="absolute z-10 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center" style={{ left: `${NODE_X[5]}%`, top: NODE_Y[5] }}
           initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.7, type: 'spring', stiffness: 280, damping: 16 }}>
-          <div className="w-[62px] h-[62px] rounded-full flex items-center justify-center text-[1.5rem]"
-            style={{ background: 'repeating-linear-gradient(45deg,#EEE7FA,#EEE7FA 6px,#E0D6F2 6px,#E0D6F2 12px)', border: '4px solid #fff' }}>🔒</div>
-          <span className="mt-1.5 font-body font-bold text-[0.64rem] px-2.5 py-1 rounded-full text-white" style={{ background: 'linear-gradient(135deg,#A88CFF,#FF9DC4)' }}>✨ Coming Soon</span>
+          <div className="w-[62px] h-[62px] rounded-full flex items-center justify-center"
+            style={{ background: 'repeating-linear-gradient(45deg,#EEE7FA,#EEE7FA 6px,#E0D6F2 6px,#E0D6F2 12px)', border: '4px solid #fff' }}>
+            <LockIcon size={24} />
+          </div>
+          <span className="mt-1.5 font-body font-bold text-[0.64rem] px-2.5 py-1 rounded-full text-white" style={{ background: 'linear-gradient(135deg,#A88CFF,#FF9DC4)' }}>Coming Soon</span>
         </motion.div>
       </div>
     </div>
@@ -767,7 +784,7 @@ function LevelMap({ def, prog, onPick }: { def: GameDef; prog: Progress; onPick:
 }
 
 /* ════════════════════════════════════════════════════════════════
-   Game modal (map ↔ play ↔ result)
+   Game modal
    ════════════════════════════════════════════════════════════════ */
 function GameModal({ def, prog, award, onClose }: { def: GameDef; prog: Progress; award: (id: string, lvl: number, s: number) => void; onClose: () => void }) {
   const [view, setView] = useState<'map' | 'play'>('map');
@@ -796,7 +813,6 @@ function GameModal({ def, prog, award, onClose }: { def: GameDef; prog: Progress
         transition={{ type: 'spring', stiffness: 240, damping: 22 }} onClick={e => e.stopPropagation()}
         className="relative w-[min(96vw,560px)] bg-white rounded-[28px] overflow-hidden flex flex-col" style={{ maxHeight: '94vh', boxShadow: '0 30px 90px rgba(60,40,100,0.4)' }}>
 
-        {/* header */}
         <div className="flex items-center justify-between px-5 py-4 shrink-0" style={{ background: def.cover }}>
           <div className="flex items-center gap-2">
             {view === 'play' && (
@@ -805,13 +821,12 @@ function GameModal({ def, prog, award, onClose }: { def: GameDef; prog: Progress
             )}
             <div>
               <div className="font-display text-white text-[1.05rem] leading-tight" style={{ fontWeight: 700 }}>{def.title}</div>
-              <div className="font-body text-white/85 text-[0.7rem]">{view === 'map' ? `Ages ${def.age} · ⭐ ${totalStars}` : `Level ${level}`}</div>
+              <div className="font-body text-white/85 text-[0.7rem]">{view === 'map' ? `Ages ${def.age} · ${totalStars} stars` : `Level ${level}`}</div>
             </div>
           </div>
           <button onClick={onClose} aria-label="Close" className="w-9 h-9 rounded-full bg-white/90 flex items-center justify-center text-[#57506A] hover:scale-105 transition-transform" style={{ fontWeight: 700 }}>✕</button>
         </div>
 
-        {/* body */}
         <div className="p-4 sm:p-5 overflow-y-auto relative">
           {view === 'map' && <LevelMap def={def} prog={prog} onPick={startLevel} />}
 
@@ -835,19 +850,19 @@ function GameModal({ def, prog, award, onClose }: { def: GameDef; prog: Progress
                 {result && (
                   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="absolute inset-0 flex flex-col items-center justify-center text-center bg-white/95 rounded-[18px] px-4">
                     {result.stars >= 2 && <Confetti />}
-                    <motion.div initial={{ scale: 0.4 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 240, damping: 13 }} className="text-[2.6rem] mb-1 relative z-10">
-                      {result.stars >= 3 ? '🏆' : result.stars >= 2 ? '🎉' : '⭐'}
+                    <motion.div initial={{ scale: 0.4 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 240, damping: 13 }} className="mb-1 relative z-10">
+                      {result.stars >= 3 ? <TrophyIcon size={56} /> : result.stars >= 2 ? <CelebrationBurst size={56} /> : <StarShape size={56} color="#FFC83D" />}
                     </motion.div>
                     <StarRow n={result.stars} />
                     <h4 className="font-display text-[1.25rem] mt-3 mb-0.5 relative z-10" style={{ fontWeight: 700, color: '#57506A' }}>
-                      {result.stars >= 3 ? 'Amazing! 🌟' : result.stars >= 2 ? 'Well done! 🎉' : 'Good try! 💪'}
+                      {result.stars >= 3 ? 'Amazing!' : result.stars >= 2 ? 'Well done!' : 'Good try!'}
                     </h4>
                     <p className="font-body text-[0.86rem] text-[#8B86A0] mb-4 relative z-10">Level {level} · {result.scoreText}</p>
                     <div className="flex flex-col items-center gap-2.5 w-full max-w-[240px]">
                       {level < LEVELS_PER_GAME ? (
                         <button onClick={() => startLevel(level + 1)} className="btn-sia text-white w-full justify-center" style={{ padding: '11px 0', fontSize: '15px', background: 'linear-gradient(135deg,#A88CFF,#FF9DC4)', boxShadow: '0 8px 22px rgba(168,140,255,0.4)' }}>Next level →</button>
                       ) : (
-                        <div className="font-body text-[0.85rem] text-[#A88CFF] font-semibold bg-[#A88CFF]/10 rounded-full px-4 py-2">🎊 All levels done! More coming soon</div>
+                        <div className="font-body text-[0.85rem] text-[#A88CFF] font-semibold bg-[#A88CFF]/10 rounded-full px-4 py-2">All levels done! More coming soon</div>
                       )}
                       <div className="flex gap-2.5 w-full">
                         <button onClick={() => startLevel(level)} className="flex-1 py-2.5 rounded-full font-body font-semibold text-[0.82rem]" style={{ background: 'rgba(168,140,255,0.12)', color: '#A88CFF' }}>↻ Replay</button>
@@ -881,11 +896,15 @@ export default function SiaGames() {
       <div className="max-w-[1400px] mx-auto">
         <motion.div className="flex items-end justify-between mb-6 sm:mb-8 gap-3" initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: .6 }}>
           <div>
-            <span className="inline-flex items-center gap-1.5 font-body font-semibold text-[0.8rem] tracking-widest uppercase text-[#A88CFF] bg-[#A88CFF]/12 px-4 py-1.5 rounded-full mb-3">🎮 Play</span>
+            <span className="inline-flex items-center gap-1.5 font-body font-semibold text-[0.8rem] tracking-widest uppercase text-[#A88CFF] bg-[#A88CFF]/12 px-4 py-1.5 rounded-full mb-3">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="6" width="20" height="14" rx="3" /><circle cx="8" cy="13" r="2" fill="currentColor" stroke="none" /><path d="M16 10v6M19 13h-6" />
+              </svg>
+              Play
+            </span>
             <h2 className="font-display text-[clamp(1.5rem,2.8vw,2.2rem)] text-[#57506A] leading-tight">Play with Sia</h2>
-            <p className="font-body text-[#8B86A0] text-[0.9rem] mt-1">Fun games for little explorers — ages 2 to 8! Each has 5 levels to unlock.</p>
+            <p className="font-body text-[#8B86A0] text-[0.9rem] mt-1">Fun games for little explorers ages 2 to 8! Each has 5 levels to unlock.</p>
           </div>
-          {/* slider arrows */}
           <div className="hidden sm:flex items-center gap-2 shrink-0">
             <button onClick={() => slide(-1)} aria-label="Previous games"
               className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-[#A88CFF] shadow-[0_4px_16px_rgba(168,140,255,0.18)] hover:scale-105 transition-transform" style={{ fontWeight: 700 }}>←</button>
@@ -894,7 +913,6 @@ export default function SiaGames() {
           </div>
         </motion.div>
 
-        {/* slider */}
         <div ref={scroller} className="flex gap-4 sm:gap-5 overflow-x-auto no-scroll pb-3 -mx-1 px-1" style={{ scrollSnapType: 'x mandatory' }}>
           {GAMES.map((g, i) => {
             const earned = Object.values(prog[g.id] || {}).reduce((a, b) => a + b, 0);
@@ -910,15 +928,21 @@ export default function SiaGames() {
                     <div className="absolute top-2.5 left-2.5">
                       <span className="font-body font-bold text-[0.6rem] px-2.5 py-1 rounded-full text-white" style={{ background: 'rgba(0,0,0,0.3)' }}>Ages {g.age}</span>
                     </div>
-                    <div className="absolute top-2.5 right-2.5 font-body font-bold text-[0.6rem] px-2 py-1 rounded-full text-white" style={{ background: 'rgba(0,0,0,0.3)' }}>{cleared}/{LEVELS_PER_GAME} ✓</div>
+                    <div className="absolute top-2.5 right-2.5 font-body font-bold text-[0.6rem] px-2 py-1 rounded-full text-white" style={{ background: 'rgba(0,0,0,0.3)' }}>{cleared}/{LEVELS_PER_GAME} done</div>
                   </div>
                   <div className="p-4">
                     <div className="flex items-center justify-between mb-1.5">
                       <div className="font-display text-[0.95rem] text-[#57506A] leading-tight" style={{ fontWeight: 700 }}>{g.title}</div>
-                      <span className="font-body text-[0.72rem]" style={{ color: '#FFC83D', fontWeight: 700 }}>★ {earned}</span>
+                      <div className="flex items-center gap-0.5">
+                        <StarShape size={13} color="#FFC83D" />
+                        <span className="font-body text-[0.72rem]" style={{ color: '#FFC83D', fontWeight: 700 }}>{earned}</span>
+                      </div>
                     </div>
                     <p className="font-body text-[0.72rem] text-[#8B86A0] leading-snug mb-2">{g.desc}</p>
-                    <span className="font-body font-semibold text-[0.76rem] inline-flex items-center gap-1" style={{ color: g.accent }}>▶ Play now</span>
+                    <span className="font-body font-semibold text-[0.76rem] inline-flex items-center gap-1.5" style={{ color: g.accent }}>
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                      Play now
+                    </span>
                   </div>
                 </motion.div>
               </motion.div>

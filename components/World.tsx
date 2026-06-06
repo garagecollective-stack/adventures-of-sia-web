@@ -63,7 +63,7 @@ export default function World() {
         </h2>
         <p className="max-w-[540px] mx-auto text-text-mid text-[1.05rem] leading-[1.8] mb-12">
           Tucked between rolling green hills and fields of colourful pom-pom flowers,
-          Sia&rsquo;s cosy stone cottage is where every adventure begins — and safely ends.
+          Sia&rsquo;s cosy stone cottage is where every adventure begins and safely ends.
         </p>
       </motion.div>
 

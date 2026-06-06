@@ -5,6 +5,8 @@ import Family from '@/components/Family';
 import WatchVideos from '@/components/WatchVideos';
 import SiaComics from '@/components/SiaComics';
 import SiaGames from '@/components/SiaGames';
+import Activities from '@/components/Activities';
+import SiaShop from '@/components/SiaShop';
 import Newsletter from '@/components/Newsletter';
 import Footer from '@/components/Footer';
 import Cursor from '@/components/ui/Cursor';
@@ -24,6 +26,8 @@ export default function Home() {
         <SiaComics />
         <WatchVideos />
         <SiaGames />
+        <Activities />
+        <SiaShop />
         <Newsletter />
       </main>
       <Footer />

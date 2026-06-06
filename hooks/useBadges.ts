@@ -20,7 +20,7 @@ export const BADGE_DEFS: Omit<Badge, 'earned' | 'earnedAt'>[] = [
   { id: 'adventurer', name: 'Adventurer',     emoji: '🌟', desc: 'Watched an episode',          color: '#2870A8', bg: '#A8C8E0' },
   { id: 'voter',      name: 'Star Voter',     emoji: '⭐', desc: 'Answered Sia\'s question',    color: '#9A7010', bg: '#F0E0A0' },
   { id: 'maker',      name: 'Creative Maker', emoji: '✏️', desc: 'Downloaded an activity',      color: '#3A7850', bg: '#8AB890' },
-  { id: 'superfan',   name: 'Super Fan',      emoji: '💜', desc: 'Earned 5 badges — wow!',      color: '#FFFFFF', bg: '#7A5CAA' },
+  { id: 'superfan',   name: 'Super Fan',      emoji: '💜', desc: 'Earned 5 badges wow!',      color: '#FFFFFF', bg: '#7A5CAA' },
 ];
 
 function load(): Record<string, { earned: boolean; earnedAt?: string }> {

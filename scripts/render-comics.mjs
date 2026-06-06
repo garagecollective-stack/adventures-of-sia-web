@@ -9,7 +9,7 @@ if (!globalThis.DOMMatrix && DOMMatrix) globalThis.DOMMatrix = DOMMatrix;
 if (!globalThis.Path2D && Path2D) globalThis.Path2D = Path2D;
 if (!globalThis.ImageData && ImageData) globalThis.ImageData = ImageData;
 
-const IDS = ['issue-1', 'issue-2', 'issue-3', 'issue-4', 'issue-5', 'issue-6', 'issue-7', 'issue-8'];
+const IDS = ['issue-1', 'issue-2', 'issue-3', 'issue-4', 'issue-5', 'issue-6', 'issue-7'];
 const dir = 'public/comics';
 const manifest = {};
 

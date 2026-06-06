@@ -1,10 +1,10 @@
-/* Fonts loaded via next/font/google in app/layout.tsx — no @import needed */
+/* Fonts loaded via next/font/google in app/layout.tsx no @import needed */
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ── VARIABLES — Official Adventures of Sia™ Palette ── */
+/* ── VARIABLES Official Adventures of Sia™ Palette ── */
 :root {
   /* Brand primaries */
   --violet:     #A88CFF;
@@ -28,6 +28,8 @@
   --bg-sunshine:  #FFE9A8;
   --bg-mint:      #DDF7E4;
   --bg-peach:     #FFE2D3;
+  --bg-sky:       #B8E7FF;
+  --bg-lilac:     #E8DCFF;
   --bg-white:     #FFFFFF;
   --border:       #ECE8F5;
 }
@@ -88,7 +90,7 @@ button:focus-visible, a:focus-visible {
   z-index: 99999;
   transform: translate(-50%, -50%);
   transition: width .2s ease, height .2s ease, background .2s ease;
-  mix-blend-mode: multiply;
+  box-shadow: 0 0 8px rgba(168,140,255,0.6);
 }
 .cursor-ring {
   width: 42px; height: 42px;
@@ -148,7 +150,7 @@ button:focus-visible, a:focus-visible {
 .pom-head { border-radius: 50%; box-shadow: inset -2px -2px 6px rgba(0,0,0,.07); }
 .pom-stem { width: 2.5px; background: #72A878; border-radius: 2px; }
 
-/* ── SIA TITLE — Fredoka 700 via CSS variable ─ */
+/* ── SIA TITLE Fredoka 700 via CSS variable ─ */
 .sia-title {
   font-family: var(--font-fredoka), sans-serif;
   font-weight: 700;
@@ -157,7 +159,7 @@ button:focus-visible, a:focus-visible {
   font-feature-settings: normal;
 }
 
-/* ── TYPOGRAPHY SYSTEM — Adventures of Sia™ ─── */
+/* ── TYPOGRAPHY SYSTEM Adventures of Sia™ ─── */
 /*
    Hero h1  → Fredoka 700
    h2 / h3  → Fredoka 600

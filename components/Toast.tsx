@@ -57,7 +57,7 @@ export function ToastContainer() {
     : [[] as ToastMsg[], (f: any) => {}];
 
   // Use proper React state
-  return null; // placeholder — see SimpleToast below
+  return null; // placeholder see SimpleToast below
 }
 
 /* Simpler self-contained version used in pages */

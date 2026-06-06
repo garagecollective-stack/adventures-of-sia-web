@@ -19,12 +19,12 @@ export type PageSlug = typeof PAGE_ORDER[number];
 export const DEFAULT_PAGES: Record<PageSlug, PageData> = {
   help: {
     emoji: '🛟', title: 'Help Center',
-    subtitle: 'Hop in — answers to the questions little explorers (and their grown-ups) ask most.',
+    subtitle: 'Hop in answers to the questions little explorers (and their grown-ups) ask most.',
     blocks: [
       { heading: 'How do I play the games?', text: 'Scroll to “Play with Sia”, tap any game card, choose a level from the map and press Play. Every game has 5 friendly levels to unlock!' },
-      { heading: 'Are the games safe for young children?', text: 'Yes! Every game is designed for ages 2–8 with big tap targets, gentle rules and no fail states — just happy learning.' },
+      { heading: 'Are the games safe for young children?', text: 'Yes! Every game is designed for ages 2–8 with big tap targets, gentle rules and no fail states just happy learning.' },
       { heading: 'How do I read and download the comics?', text: 'Open any comic in the “Sia Comics” section to read it as a PDF, then tap “Download PDF” to keep it forever.' },
-      { heading: 'I found a problem — who do I tell?', text: 'We’d love to help! Visit our Contact Us page and drop us a message. We read every one. 💜' },
+      { heading: 'I found a problem who do I tell?', text: 'We’d love to help! Visit our Contact Us page and drop us a message. We read every one. 💜' },
     ],
   },
   privacy: {
@@ -48,9 +48,9 @@ export const DEFAULT_PAGES: Record<PageSlug, PageData> = {
   },
   contact: {
     emoji: '✉️', title: 'Contact Us',
-    subtitle: 'We’d love to hear from you — questions, ideas, or just a friendly hello!',
+    subtitle: 'We’d love to hear from you questions, ideas, or just a friendly hello!',
     blocks: [
-      { heading: 'Email', text: 'hello@adventuresofsia.com — we reply within a couple of days.' },
+      { heading: 'Email', text: 'hello@adventuresofsia.com we reply within a couple of days.' },
       { heading: 'For parents', text: 'Have a question about safety or learning? Pop over to our For Parents page for the full guide.' },
       { heading: 'Say hi on social', text: 'Find us on YouTube, Instagram, TikTok and Facebook for new stories, games and cute surprises.' },
     ],
@@ -61,7 +61,7 @@ export const DEFAULT_PAGES: Record<PageSlug, PageData> = {
     blocks: [
       { heading: '🧸 Toys & Plushies', text: 'Soft, cuddly Sia, Milo & Arlo plushies to hug all night long.' },
       { heading: '📚 Story Books', text: 'Beautiful picture books full of Sia’s magical meadow adventures.' },
-      { heading: '🎒 Accessories', text: 'Backpacks, bottles, stickers and more — bring Sia everywhere!' },
+      { heading: '🎒 Accessories', text: 'Backpacks, bottles, stickers and more bring Sia everywhere!' },
     ],
   },
 };

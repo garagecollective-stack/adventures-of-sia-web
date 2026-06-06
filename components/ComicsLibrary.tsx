@@ -199,7 +199,7 @@ export default function ComicsLibrary() {
             <div className="text-[2.6rem] mb-2">🌙</div>
             <h3 className="font-display text-[1.3rem] text-[#57506A] mb-1">More adventures are on the way!</h3>
             <p className="font-body text-[#8B86A0] text-[0.9rem]">
-              Issue #9 is being drawn right now. Check back soon for the next chapter! 💜
+              Issue #8 is being drawn right now. Check back soon for the next chapter! 💜
             </p>
           </motion.div>
         </div>
